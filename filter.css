@@ -1,0 +1,24 @@
+filterdemo-panel {
+    display: block;
+}
+
+.pickedTag {
+  background-color: lightgray;
+  border-radius: 30%;
+  padding-right: 4px;
+  padding-left: 4px;
+}
+
+.pickableTag {
+  background-color: lightgreen;
+  border-radius: 30%;
+  padding-right: 4px;
+  padding-left: 4px;
+}
+
+.tagCombo {
+  background-color: lightgreen;
+  margin-right: 4px;
+  margin-left: 4px;
+}
+
