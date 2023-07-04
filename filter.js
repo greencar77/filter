@@ -36,11 +36,14 @@ function FilterCore(entries, config) {
     this.populatePanel = function(panel) {
         console.log("populatePanel id=" + panel.id);
 
-        let filteredEntries;
+        let filteredEntries, random;
         if (this.filters && this.filters.has(panel.id)) {
             let filterFn = this.filters.get(panel.id).filter;
             if (this.filters.get(panel.id).filterMethod) {
                 filterFn = this[this.filters.get(panel.id).filterMethod];
+            }
+            if (this.filters.get(panel.id).random) {
+                random = true;
             }
             filteredEntries = this.entries.filter(filterFn);
             console.log('Filtered ' + filteredEntries.length);
@@ -57,6 +60,10 @@ function FilterCore(entries, config) {
         this.context.set(panel.id, context);
 
         panel.appendChild(this.createFilterPane(context));
+        if (random) {
+            let toggleElement = this.createRandomToggle(context);
+            panel.appendChild(toggleElement);
+        }
         panel.appendChild(this.createCollectionPane(filteredEntries, this.entryCreator, context.appliedFilters));
     }
 
@@ -81,16 +88,16 @@ function FilterCore(entries, config) {
 
         let result = document.createElement('div');
         let ol = document.createElement('ol');
-        this.refreshCollectionPane(ol, entries, entryFn, skippingTags);
+        this.refreshCollectionPane(ol, entries, entryFn, skippingTags, this.config.itemsComparator);
         result.appendChild(ol);
         return result;
     }
 
-    this.refreshCollectionPane = function(parent, entries, entryFn, skippingTags) {
+    this.refreshCollectionPane = function(parent, entries, entryFn, skippingTags, sortingFn) {
         parent.innerHTML = '';
         let sortedEntries = entries;
-        if (this.config.itemsComparator) {
-            sortedEntries = entries.sort(this.config.itemsComparator);
+        if (sortingFn) {
+            sortedEntries = entries.sort(sortingFn);
         }
         for (const entry of sortedEntries) {
             parent.appendChild(entryFn(entry, skippingTags));
@@ -143,7 +150,7 @@ function FilterCore(entries, config) {
         context.remainingTagMap = this.createTagMap(context.entries, this.ignorableTags);
 
         this.refreshFilterPane(panelElem.children[0], context);
-        this.refreshCollectionPane(panelElem.children[1].children[0], context.entries, this.entryCreator, context.appliedFilters);
+        this.refreshCollectionPane(panelElem.children[panelElem.children.length - 1].children[0], context.entries, this.entryCreator, context.appliedFilters, this.config.itemsComparator);
     }
 
     this.forcedlyPickCompleteTags = function(context) {
@@ -240,5 +247,30 @@ function FilterCore(entries, config) {
             return filterTags.reduce((accumulator, tag) => accumulator && x.tagList.includes(tag), true);
         }
         return false;
+    }
+
+    this.createRandomToggle = function(context) {
+        let result = document.createElement('span');
+        result.setAttribute('class', 'randomToggle');
+        result.textContent = '[random]';
+        result.setAttribute('onclick', this.appName + "." + this.filterPropertyName + ".randomSort(this);");
+        return result;
+    }
+
+    this.randomSort = function(elem) {
+        let root = elem.parentElement;
+
+        let filterId = root.id;
+        console.log('randomSort ' + filterId);
+
+        let context = this.context.get(filterId);
+        this.refreshCollectionPane(root.children[root.children.length - 1].children[0], context.entries, this.entryCreator, context.appliedFilters, this.randomSorter);
+    }
+
+    this.randomSorter = function(a, b) {
+        if (Math.random() > Math.random()) {
+            return 1;
+        }
+        return -1;
     }
 }

@@ -38,8 +38,20 @@ function FilterDemo() {
                    },
                 },
                 {
+                   "id": "f5",
+                   "filter": function(x) {
+                       return x.tagList && x.tagList.includes('a');
+                   },
+                   "random": true,
+                },
+                {
                    "id": "f4",
                    "filter": this.urlFilterDemo,
+                },
+                {
+                   "id": "f5",
+                   "filter": this.urlFilterDemo,
+                   "random": true,
                 },
             ],
             "ignorableTags": ["d"],
