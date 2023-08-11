@@ -38,15 +38,23 @@ function FilterCore(entries, config) {
 
         let filteredEntries, random;
         if (this.filters && this.filters.has(panel.id)) {
-            let filterFn = this.filters.get(panel.id).filter;
-            if (this.filters.get(panel.id).filterMethod) {
-                filterFn = this[this.filters.get(panel.id).filterMethod];
+            let filterSettings = this.filters.get(panel.id);
+
+            let filterFn = filterSettings.filter;
+            if (filterSettings.filterMethod) {
+                filterFn = this[filterSettings.filterMethod];
             }
-            if (this.filters.get(panel.id).random) {
+            if (filterFn) {
+                filteredEntries = this.entries.filter(filterFn);
+                console.log('Filtered ' + filteredEntries.length);
+            } else {
+                filteredEntries = this.entries;
+                console.log('As-is ' + filteredEntries.length);
+        }
+
+            if (filterSettings.random) {
                 random = true;
             }
-            filteredEntries = this.entries.filter(filterFn);
-            console.log('Filtered ' + filteredEntries.length);
         } else {
             filteredEntries = this.entries;
             console.log('Complete (non-filtered) set ' + filteredEntries.length);
@@ -86,11 +94,24 @@ function FilterCore(entries, config) {
             return;
         }
 
-        let result = document.createElement('div');
-        let ol = document.createElement('ol');
-        this.refreshCollectionPane(ol, entries, entryFn, skippingTags, this.config.itemsComparator);
-        result.appendChild(ol);
-        return result;
+        let result = this.createContainer();
+        this.refreshCollectionPane(result.inner, entries, entryFn, skippingTags, this.config.itemsComparator);
+        return result.outer;
+    }
+
+    this.createContainer = function() {
+        if (this.config.containerFn) {
+            return this.config.containerFn()();
+        } else {
+            return this.createContainerDefault();
+        }
+    }
+
+    this.createContainerDefault = function() {
+        let outerElement = document.createElement('div');
+        let innerElement = document.createElement('ol');
+        outerElement.appendChild(innerElement);
+        return { "outer": outerElement, "inner": innerElement};
     }
 
     this.refreshCollectionPane = function(parent, entries, entryFn, skippingTags, sortingFn) {

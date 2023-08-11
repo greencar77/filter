@@ -26,3 +26,25 @@ filterdemo-panel {
   padding-left: 4px;
 }
 
+table.filter {
+	border-width: 1px;
+	border-spacing: 2px;
+	border-style: outset;
+	border-color: gray;
+	border-collapse: collapse;
+	background-color: transparent;
+	table-layout: fixed;
+}
+
+td.filter {
+	border-width: 1px;
+	padding: 4px;
+	border-style: inset;
+	border-color: gray;
+	background-color: transparent;
+	-moz-border-radius: 0px 0px 0px 0px;
+	vertical-align: top;
+	word-wrap: break-word;
+}
+
+
