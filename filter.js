@@ -234,7 +234,12 @@ function FilterCore(entries, config) {
         //subtract
         let updatedRemainingTags = remainingTags.filter(t => !groupKeys.includes(t));
         let combo = document.createElement('select');
-        combo.setAttribute('id', 'sel_' + context.panelId + '_' + 'pref_' + (group.id? group.id: group.byPrefix));
+        let comboId = group.id? group.id: group.byPrefix;
+        if (!comboId) {
+            alert('Missing tagGroup id!'); //otherwise "undefined" and if there will be >=2 a clash will occur
+            return;
+        }
+        combo.setAttribute('id', 'sel_' + context.panelId + '_' + 'pref_' + comboId);
         combo.setAttribute('class', 'tagCombo');
         combo.setAttribute('onchange', this.appName + '.filterApp.pickComboTag(this);');
         let option = document.createElement('option');
