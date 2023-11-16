@@ -46,11 +46,11 @@ function FilterCore(entries, config) {
             }
             if (filterFn) {
                 filteredEntries = this.entries.filter(filterFn);
-                console.log('Filtered ' + filteredEntries.length);
+                console.log('Filtered: ' + filteredEntries.length);
             } else {
                 filteredEntries = this.entries;
-                console.log('As-is ' + filteredEntries.length);
-        }
+                console.log('As-is: ' + filteredEntries.length);
+            }
 
             if (filterSettings.random) {
                 random = true;
