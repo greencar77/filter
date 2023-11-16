@@ -89,13 +89,6 @@ function FilterDemo() {
     this.filterApp = new FilterCore(this.data, this.filterConfig);
 
     this.init = function() {
-        let groups = [
-                         {
-                             "id": "g1",
-                             "prefix": "sup_"
-                         },
-                     ];
-
         this.filterApp.init();
 
         this.filterApp.applyFilterByPanelId('f2', 'b');
