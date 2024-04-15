@@ -11,9 +11,9 @@ function FilterDemo() {
         { "id": "x3", "name": "Gamma", "tagList": ["a", "b", "c", "sup_a"] },
         { "id": "x4", "name": "Gamma", "tagList": [] },
         { "id": "x5", "name": "Gamma", "tagList": ["tum", "j_b"] },
-        { "id": "x6", "name": "duplicate tags", "tagList": ["small", "small", "b", "j_b", "j_a"] },
+        { "id": "x6", "name": "duplicate tags", "tagList": ["small", "small", "b", "j_b", "j_a", "y_2022", "y_2023" ] },
         { "id": "x7", "name": "duplicate tags", "tagList": ["small", "alpha", "beta"] },
-        { "id": "x8", "name": "duplicate tags", "tagList": ["beta", "gamma"] },
+        { "id": "x8", "name": "duplicate tags", "tagList": ["beta", "gamma", "y_2020", "y_2022"] },
     ];
 
     this.urlFilterDemo = function(x) {
@@ -82,6 +82,12 @@ function FilterDemo() {
                     "id": "g2",
                     "byValues": [ "alpha", "beta", "gamma" ],
                     "title": "some title",
+                },
+                {
+                    "id": "pref2",
+                    "title": "Year (desc)",
+                    "byPrefix": "y_",
+                    "sort": "desc",
                 },
             ],
         };

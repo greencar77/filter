@@ -231,6 +231,11 @@ function FilterCore(entries, config) {
         if (groupKeys.length == 0) {
             return remainingTags;
         }
+        if (group.sort) {
+            if (group.sort == 'desc') {
+                groupKeys.sort().reverse();
+            }
+        }
         //subtract
         let updatedRemainingTags = remainingTags.filter(t => !groupKeys.includes(t));
         let combo = document.createElement('select');
@@ -244,7 +249,8 @@ function FilterCore(entries, config) {
         combo.setAttribute('onchange', this.appName + '.filterApp.pickComboTag(this);');
         let option = document.createElement('option');
         option.textContent = group.title? group.title : group.byPrefix;
-        combo.appendChild(option);
+        combo.appendChild(option); //title option
+        //value options
         groupKeys.forEach(k => {
             option = document.createElement('option');
             option.value = k;
